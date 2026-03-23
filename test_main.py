@@ -52,3 +52,20 @@ def test_attack_can_deal_zero_damage():
     with patch('character.random.randint', return_value=0):
         hero.attack(enemy)
     assert enemy.hp == 10
+
+from weapon import Weapon
+
+def test_weapon_increases_damage():
+    sword = Weapon("Sword", bonus_damage=3)
+    hero = Character("Hero", weapon=sword)
+    enemy = Character("Enemy")
+    with patch('random.randint', return_value=4):
+        hero.attack(enemy)
+    assert enemy.hp == 6  # 10 - 4
+
+def test_no_weapon_uses_base_damage():
+    hero = Character("Hero")
+    enemy = Character("Enemy")
+    with patch('random.randint', return_value=1):
+        hero.attack(enemy)
+    assert enemy.hp == 9
