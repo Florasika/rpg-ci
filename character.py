@@ -9,6 +9,10 @@ class Character:
         return self.hp > 0
 
     def attack(self, other):
+<<<<<<< Updated upstream
         D = 1
+=======
+        D = 1 + self.force + (self.level - 1) * 2
+>>>>>>> Stashed changes
         damage = random.randint(0, D)
         other.hp -= damage
