@@ -19,3 +19,17 @@ class Character:
         damage = random.randint(0, D)
         actual_damage = max(0, damage - other.armor)
         other.hp -= actual_damage
+
+        # Si l'ennemi meurt, on gagne un point de stat aléatoire
+        if not other.is_alive():
+            self.level_up()
+
+    def level_up(self):
+        stat = random.choice(['endurance', 'force', 'armor'])
+        if stat == 'endurance':
+            self.endurance += 1
+            self.hp += 1
+        elif stat == 'force':
+            self.force += 1
+        elif stat == 'armor':
+            self.armor += 1

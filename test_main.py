@@ -98,3 +98,20 @@ def test_no_weapon_uses_base_damage():
     with patch('character.random.randint', return_value=1):
         hero.attack(enemy)
     assert enemy.hp == 9
+
+def test_killing_enemy_triggers_levelup():
+    hero = Character("Hero", force=10)
+    enemy = Character("Enemy")
+    enemy.hp = 1
+    with patch('random.randint', return_value=5):
+        with patch('random.choice', return_value='force'):
+            hero.attack(enemy)
+    assert not enemy.is_alive()
+    assert hero.force == 11
+
+def test_no_levelup_if_enemy_survives():
+    hero = Character("Hero")
+    enemy = Character("Enemy")
+    with patch('random.randint', return_value=0):
+        hero.attack(enemy)
+    assert hero.force == 0
