@@ -98,3 +98,25 @@ def test_no_weapon_uses_base_damage():
     with patch('character.random.randint', return_value=1):
         hero.attack(enemy)
     assert enemy.hp == 9
+
+from battle import get_target
+
+def test_low_hp_character_is_priority_target():
+    hero1 = Character("Hero1")
+    hero2 = Character("Hero2")
+    hero2.hp = 2  # < 30% de 10 = 3
+    target = get_target([hero1, hero2])
+    assert target == hero2
+
+def test_normal_hp_returns_first_alive():
+    hero1 = Character("Hero1")
+    hero2 = Character("Hero2")
+    target = get_target([hero1, hero2])
+    assert target == hero1
+
+def test_dead_characters_not_targeted():
+    hero1 = Character("Hero1")
+    hero1.hp = 0
+    hero2 = Character("Hero2")
+    target = get_target([hero1, hero2])
+    assert target == hero2
