@@ -1,5 +1,6 @@
 from character import Character
 from battle import duel_2v2
+from weapon import Weapon
 from unittest.mock import patch
 
 def test_character_starts_with_10_hp():
@@ -54,8 +55,6 @@ def test_attack_can_deal_zero_damage():
         hero.attack(enemy)
     assert enemy.hp == 10
 
-
-
 def test_duel_2v2_returns_winning_team():
     team1 = [Character("Hero1"), Character("Hero2")]
     team2 = [Character("Enemy1"), Character("Enemy2")]
@@ -85,3 +84,17 @@ def test_armor_cannot_give_negative_damage():
         hero.attack(enemy)
     assert enemy.hp == 10
 
+def test_weapon_increases_damage():
+    sword = Weapon("Sword", bonus_damage=3)
+    hero = Character("Hero", weapon=sword)
+    enemy = Character("Enemy")
+    with patch('character.random.randint', return_value=4):
+        hero.attack(enemy)
+    assert enemy.hp == 6
+
+def test_no_weapon_uses_base_damage():
+    hero = Character("Hero")
+    enemy = Character("Enemy")
+    with patch('character.random.randint', return_value=1):
+        hero.attack(enemy)
+    assert enemy.hp == 9
