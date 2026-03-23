@@ -1,4 +1,5 @@
 from character import Character
+from battle import duel_2v2
 from unittest.mock import patch
 
 def test_character_starts_with_10_hp():
@@ -52,3 +53,21 @@ def test_attack_can_deal_zero_damage():
     with patch('character.random.randint', return_value=0):
         hero.attack(enemy)
     assert enemy.hp == 10
+
+
+
+def test_duel_2v2_returns_winning_team():
+    team1 = [Character("Hero1"), Character("Hero2")]
+    team2 = [Character("Enemy1"), Character("Enemy2")]
+    # On force les dégâts à 1 pour simplifier
+    with patch('random.randint', return_value=1):
+        winner = duel_2v2(team1, team2)
+    assert winner is not None
+
+def test_duel_2v2_loser_is_dead():
+    team1 = [Character("Hero1"), Character("Hero2")]
+    team2 = [Character("Enemy1"), Character("Enemy2")]
+    with patch('random.randint', return_value=1):
+        winner = duel_2v2(team1, team2)
+    loser = team2 if winner == team1 else team1
+    assert all(not c.is_alive() for c in loser)
