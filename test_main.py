@@ -21,34 +21,34 @@ def test_level_increases_hp():
 def test_level_increases_damage():
     hero = Character("Hero", level=2, force=3)
     enemy = Character("Enemy")
-    with patch('random.randint', return_value=6):
+    with patch('character.random.randint', return_value=6):
         hero.attack(enemy)
     assert enemy.hp == 4
 
 def test_force_increases_damage():
     hero = Character("Hero", force=3)
     enemy = Character("Enemy")
-    with patch('random.randint', return_value=4):
+    with patch('character.random.randint', return_value=4):
         hero.attack(enemy)
     assert enemy.hp == 6
 
 def test_zero_force_gives_1_damage():
     hero = Character("Hero", force=0)
     enemy = Character("Enemy")
-    with patch('random.randint', return_value=1):
+    with patch('character.random.randint', return_value=1):
         hero.attack(enemy)
     assert enemy.hp == 9
 
 def test_attack_damage_is_random():
     hero = Character("Hero")
     enemy = Character("Enemy")
-    with patch('random.randint', return_value=1):
+    with patch('character.random.randint', return_value=1):
         hero.attack(enemy)
     assert enemy.hp == 9
 
 def test_attack_can_deal_zero_damage():
     hero = Character("Hero")
     enemy = Character("Enemy")
-    with patch('random.randint', return_value=0):
+    with patch('character.random.randint', return_value=0):
         hero.attack(enemy)
     assert enemy.hp == 10
