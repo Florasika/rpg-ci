@@ -1,3 +1,5 @@
+import random
+
 class Character:
     def __init__(self, name):
         self.name = name
@@ -7,4 +9,6 @@ class Character:
         return self.hp > 0
 
     def attack(self, other):
-        other.hp -= 1
+        D = 1
+        damage = random.randint(0, D)
+        other.hp -= damage

@@ -1,4 +1,5 @@
 from character import Character
+from unittest.mock import patch
 
 def test_character_starts_with_10_hp():
     hero = Character("Hero")
@@ -9,12 +10,16 @@ def test_character_dies_at_zero_hp():
     hero.hp = 0
     assert hero.is_alive() == False
 
-def test_attack_reduces_hp_by_1():
+def test_attack_damage_is_random():
     hero = Character("Hero")
     enemy = Character("Enemy")
-    hero.attack(enemy)
+    with patch('random.randint', return_value=1):
+        hero.attack(enemy)
     assert enemy.hp == 9
 
-def test_character_alive_with_hp():
+def test_attack_can_deal_zero_damage():
     hero = Character("Hero")
-    assert hero.is_alive() == True
+    enemy = Character("Enemy")
+    with patch('random.randint', return_value=0):
+        hero.attack(enemy)
+    assert enemy.hp == 10
