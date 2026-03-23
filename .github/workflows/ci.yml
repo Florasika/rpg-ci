@@ -31,12 +31,15 @@ jobs:
         id: tests
         run: pytest -v
 
-      - name: SUCCÈS - Fast-forward main vers dev
+      - name: SUCCÈS - Fast-forward main sur dev
         if: success()
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git push origin HEAD:main
+          git config user.email "ci-bot@github.com"
+          git config user.name "CI Bot"
+          git fetch origin
+          git checkout main
+          git reset --hard dev
+          git push --force origin main
 
       - name: ÉCHEC - Déplacer le commit sur failures/
         if: failure()
