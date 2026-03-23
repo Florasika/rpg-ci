@@ -98,3 +98,18 @@ def test_no_weapon_uses_base_damage():
     with patch('character.random.randint', return_value=1):
         hero.attack(enemy)
     assert enemy.hp == 9
+
+from character import Character, get_first_attacker
+
+def test_highest_agility_attacks_first():
+    hero = Character("Hero", agility=10)
+    enemy = Character("Enemy", agility=2)
+    first = get_first_attacker(hero, enemy)
+    assert first == hero
+
+def test_equal_agility_is_random():
+    hero = Character("Hero", agility=5)
+    enemy = Character("Enemy", agility=5)
+    with patch('random.choice', return_value=hero):
+        first = get_first_attacker(hero, enemy)
+    assert first == hero
