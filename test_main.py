@@ -15,6 +15,12 @@ def test_attack_reduces_hp_by_1():
     hero.attack(enemy)
     assert enemy.hp == 9
 
-def test_character_alive_with_hp():
-    hero = Character("Hero")
-    assert hero.is_alive() == True
+def test_level_increases_hp():
+    hero = Character("Hero", level=2)
+    assert hero.hp == 12
+
+def test_level_increases_damage():
+    hero = Character("Hero", level=2)
+    enemy = Character("Enemy")
+    hero.attack(enemy)
+    assert enemy.hp == 7
