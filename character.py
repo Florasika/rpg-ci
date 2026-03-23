@@ -1,12 +1,14 @@
 class Character:
-    def __init__(self, name, level=1):
+    def __init__(self, name, endurance=0, level=1, force=0):
         self.name = name
+        self.endurance = endurance
         self.level = level
-        self.hp = 10 + (level - 1) * 2
+        self.force = force
+        self.hp = 10 + endurance + (level - 1) * 2
 
     def is_alive(self):
         return self.hp > 0
 
     def attack(self, other):
-        damage = 1 + (self.level - 1) * 2
+        damage = 1 + self.force + (self.level - 1) * 2
         other.hp -= damage

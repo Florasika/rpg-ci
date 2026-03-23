@@ -20,7 +20,19 @@ def test_level_increases_hp():
     assert hero.hp == 12
 
 def test_level_increases_damage():
-    hero = Character("Hero", level=2)
+    hero = Character("Hero", level=2, force=3)
     enemy = Character("Enemy")
     hero.attack(enemy)
     assert enemy.hp == 7
+
+def test_force_increases_damage():
+    hero = Character("Hero", force=3)
+    enemy = Character("Enemy")
+    hero.attack(enemy)
+    assert enemy.hp == 6
+
+def test_zero_force_gives_1_damage():
+    hero = Character("Hero", force=0)
+    enemy = Character("Enemy")
+    hero.attack(enemy)
+    assert enemy.hp == 9
