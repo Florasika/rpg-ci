@@ -1,5 +1,5 @@
-from character import Character
-from battle import duel_2v2
+from character import Character, get_first_attacker
+from battle import duel_2v2, get_target
 from weapon import Weapon
 from unittest.mock import patch
 
@@ -103,8 +103,8 @@ def test_killing_enemy_triggers_levelup():
     hero = Character("Hero", force=10)
     enemy = Character("Enemy")
     enemy.hp = 1
-    with patch('random.randint', return_value=5):
-        with patch('random.choice', return_value='force'):
+    with patch('character.random.randint', return_value=5):
+        with patch('character.random.choice', return_value='force'):
             hero.attack(enemy)
     assert not enemy.is_alive()
     assert hero.force == 11
@@ -112,6 +112,39 @@ def test_killing_enemy_triggers_levelup():
 def test_no_levelup_if_enemy_survives():
     hero = Character("Hero")
     enemy = Character("Enemy")
-    with patch('random.randint', return_value=0):
+    with patch('character.random.randint', return_value=0):
         hero.attack(enemy)
     assert hero.force == 0
+
+def test_highest_agility_attacks_first():
+    hero = Character("Hero", agility=10)
+    enemy = Character("Enemy", agility=2)
+    first = get_first_attacker(hero, enemy)
+    assert first == hero
+
+def test_equal_agility_is_random():
+    hero = Character("Hero", agility=5)
+    enemy = Character("Enemy", agility=5)
+    with patch('character.random.choice', return_value=hero):
+        first = get_first_attacker(hero, enemy)
+    assert first == hero
+
+def test_low_hp_character_is_priority_target():
+    hero1 = Character("Hero1")
+    hero2 = Character("Hero2")
+    hero2.hp = 2
+    target = get_target([hero1, hero2])
+    assert target == hero2
+
+def test_normal_hp_returns_first_alive():
+    hero1 = Character("Hero1")
+    hero2 = Character("Hero2")
+    target = get_target([hero1, hero2])
+    assert target == hero1
+
+def test_dead_characters_not_targeted():
+    hero1 = Character("Hero1")
+    hero1.hp = 0
+    hero2 = Character("Hero2")
+    target = get_target([hero1, hero2])
+    assert target == hero2
