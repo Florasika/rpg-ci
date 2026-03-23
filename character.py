@@ -1,3 +1,5 @@
+import random
+
 class Character:
     def __init__(self, name, endurance=0, level=1, force=0):
         self.name = name
@@ -10,5 +12,6 @@ class Character:
         return self.hp > 0
 
     def attack(self, other):
-        damage = 1 + self.force + (self.level - 1) * 2
+        D = 1 + self.force + (self.level - 1) * 2
+        damage = random.randint(0, D)
         other.hp -= damage
