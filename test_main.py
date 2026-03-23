@@ -52,3 +52,17 @@ def test_attack_can_deal_zero_damage():
     with patch('character.random.randint', return_value=0):
         hero.attack(enemy)
     assert enemy.hp == 10
+
+def test_armor_reduces_damage():
+    hero = Character("Hero", force=5)
+    enemy = Character("Enemy", armor=2)
+    with patch('random.randint', return_value=5):
+        hero.attack(enemy)
+    assert enemy.hp == 7  # 10 - (5 - 2) = 7
+
+def test_armor_cannot_give_negative_damage():
+    hero = Character("Hero")
+    enemy = Character("Enemy", armor=10)
+    with patch('random.randint', return_value=1):
+        hero.attack(enemy)
+    assert enemy.hp == 10  # pas de dégâts négatifs
