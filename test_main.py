@@ -59,15 +59,29 @@ def test_attack_can_deal_zero_damage():
 def test_duel_2v2_returns_winning_team():
     team1 = [Character("Hero1"), Character("Hero2")]
     team2 = [Character("Enemy1"), Character("Enemy2")]
-    # On force les dégâts à 1 pour simplifier
-    with patch('random.randint', return_value=1):
+    with patch('character.random.randint', return_value=1):
         winner = duel_2v2(team1, team2)
     assert winner is not None
 
 def test_duel_2v2_loser_is_dead():
     team1 = [Character("Hero1"), Character("Hero2")]
     team2 = [Character("Enemy1"), Character("Enemy2")]
-    with patch('random.randint', return_value=1):
+    with patch('character.random.randint', return_value=1):
         winner = duel_2v2(team1, team2)
     loser = team2 if winner == team1 else team1
     assert all(not c.is_alive() for c in loser)
+
+def test_armor_reduces_damage():
+    hero = Character("Hero", force=5)
+    enemy = Character("Enemy", armor=2)
+    with patch('character.random.randint', return_value=5):
+        hero.attack(enemy)
+    assert enemy.hp == 7
+
+def test_armor_cannot_give_negative_damage():
+    hero = Character("Hero")
+    enemy = Character("Enemy", armor=10)
+    with patch('character.random.randint', return_value=1):
+        hero.attack(enemy)
+    assert enemy.hp == 10
+
