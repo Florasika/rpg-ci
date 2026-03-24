@@ -7,6 +7,7 @@ def get_target(enemies):
     if not alive:
         return None
 
+    # HP max = 10 + endurance + (level-1)*2
     priority = [c for c in alive
                 if c.hp < (10 + c.endurance + (c.level - 1) * 2) * 0.3]
 
